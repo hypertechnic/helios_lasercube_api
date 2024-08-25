@@ -21,6 +21,8 @@ pps = 64000                         # Points per second
 center_x = 0xFFF // 2               # Center of the face (x)
 center_y = 0xFFF // 2               # Center of the face (y)
 radius = 0xFFF // 4                 # Radius for the face outline
+animationFrames = 1            # Only one frame needed for a static circle
+totalFramesToPlay = 100        # Number of times to repeat the circle display
 
 # Create a frame
 frameType = HeliosPoint * framePointLength
@@ -66,11 +68,12 @@ for i in range(framePointLength // 6):
     face_frame[2 * framePointLength // 3 + i] = HeliosPoint(x, y, 255, 255, 255, 255)
 
 # Play the frame on the DAC
-for j in range(numDevices):
-    statusAttempts = 0
-    while (statusAttempts < 512 and HeliosLib.GetStatus(j) != 1):
-        statusAttempts += 1
-    HeliosLib.WriteFrame(j, pps, 0, ctypes.pointer(face_frame), framePointLength)
+for _ in range(totalFramesToPlay):
+    for j in range(numDevices):
+        statusAttempts = 0
+        while (statusAttempts < 512 and HeliosLib.GetStatus(j) != 1):
+            statusAttempts += 1
+        HeliosLib.WriteFrame(j, pps, 0, ctypes.pointer(face_frame), framePointLength)
 
 # Close the DAC connection
 HeliosLib.CloseDevices()
