@@ -7,9 +7,6 @@ Example for using Helios DAC libraries in python (using C library with ctypes)
 NB: If you haven't set up udev rules you need to use sudo to run the program for it to detect the DAC.
 """
 
-
-
-
 xRes = 1000
 animationFrames = 50
 framePointLength = 1000                                            #1000, cant be less than 1000, seems like buffer max pps
